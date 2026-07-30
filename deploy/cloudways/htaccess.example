@@ -1,0 +1,16 @@
+# Cloudways reverse proxy for the eros-text Node app.
+#
+# Copy this file to your application's public_html/.htaccess (note the leading
+# dot). It forwards all incoming web traffic to the Node process running on
+# 127.0.0.1:3000 — change the port if you set a different PORT in .env.
+#
+# Requires the Apache modules mod_proxy and mod_proxy_http. If the proxy
+# returns a 500/403, open a Cloudways support ticket and ask them to enable
+# "mod_proxy and mod_proxy_http" for your application — it's a standard request.
+
+DirectoryIndex disabled
+RewriteEngine On
+RewriteBase /
+
+# Forward everything to the Node app (the [P] flag proxies the request).
+RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]

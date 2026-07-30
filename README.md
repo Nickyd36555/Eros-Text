@@ -67,6 +67,10 @@ Deploy it anywhere that can run Node and is reachable over HTTPS
 `/webhooks/woocommerce` URL. Use a host with a **persistent disk** so the
 SQLite dedupe file survives restarts (set `DB_PATH` to that disk).
 
+**On Cloudways?** Follow the step-by-step guide in
+[CLOUDWAYS.md](CLOUDWAYS.md) — it covers running the bot with PM2 and putting a
+reverse proxy in front so a real HTTPS URL reaches it.
+
 ### 3. Point WooCommerce at it
 
 In WordPress admin: **WooCommerce → Settings → Advanced → Webhooks → Add webhook**.
