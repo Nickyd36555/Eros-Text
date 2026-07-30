@@ -1,0 +1,21 @@
+{
+  "name": "eros-text",
+  "version": "0.1.0",
+  "description": "SMS notifications for Eros Labs orders (placed, processing, shipped) via WooCommerce webhooks and Twilio.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "libphonenumber-js": "^1.11.20",
+    "twilio": "^5.4.3"
+  }
+}
