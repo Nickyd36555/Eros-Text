@@ -65,8 +65,14 @@ cp .env.example .env
 nano .env          # fill in Twilio + WooCommerce values
 ```
 
-At minimum set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, a sender
-(`TWILIO_MESSAGING_SERVICE_SID` or `TWILIO_FROM`), and `WC_WEBHOOK_SECRET`.
+At minimum set `SMS_PROVIDER`, your provider's credentials, and
+`WC_WEBHOOK_SECRET`:
+
+- **Telnyx** (`SMS_PROVIDER=telnyx`): `TELNYX_API_KEY` + a sender
+  (`TELNYX_MESSAGING_PROFILE_ID` or `TELNYX_FROM`).
+- **Twilio** (`SMS_PROVIDER=twilio`): `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`
+  + a sender (`TWILIO_MESSAGING_SERVICE_SID` or `TWILIO_FROM`).
+
 Leave `PORT=3000` unless that port is already used on the server. The SQLite
 dedupe file lives in `data/` inside this folder, so it persists across restarts.
 

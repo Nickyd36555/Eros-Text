@@ -3,7 +3,9 @@
 An SMS bot that texts your customers when their **Eros Labs** order is
 **placed**, **processing**, and **shipped** — including the tracking number.
 
-It listens for WooCommerce order webhooks and sends texts through Twilio.
+It listens for WooCommerce order webhooks and sends texts through your choice of
+SMS provider — **Telnyx** or **Twilio** — selected with one setting
+(`SMS_PROVIDER`).
 
 > Every message is branded only as *Eros Labs*. The copy never describes or
 > hints at the product category.
@@ -47,9 +49,13 @@ cp .env.example .env
 
 Fill in `.env` (see the comments in `.env.example`):
 
-- **Twilio** — `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and either a
-  `TWILIO_MESSAGING_SERVICE_SID` (recommended — it handles STOP/opt-out
-  automatically) or a single `TWILIO_FROM` number.
+- **SMS provider** — set `SMS_PROVIDER` to `telnyx` or `twilio`. You only need
+  the credentials for the one you pick.
+  - **Telnyx** — `TELNYX_API_KEY` and either `TELNYX_MESSAGING_PROFILE_ID`
+    (recommended) or a single `TELNYX_FROM` number.
+  - **Twilio** — `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and either a
+    `TWILIO_MESSAGING_SERVICE_SID` (recommended — it handles STOP/opt-out
+    automatically) or a single `TWILIO_FROM` number.
 - **WooCommerce** — `WC_WEBHOOK_SECRET` (you'll set the same value in step 3).
 - Optionally `SHIPPED_STATUS` if you use a custom "shipped" order status
   instead of WooCommerce's default `completed`.

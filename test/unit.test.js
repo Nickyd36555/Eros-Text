@@ -10,7 +10,7 @@ import {
   orderNumber,
 } from '../src/woocommerce.js';
 import { buildMessage } from '../src/messages.js';
-import { normalizePhone } from '../src/sms.js';
+import { normalizePhone, createSms } from '../src/sms.js';
 
 test('verifySignature accepts a correct HMAC-SHA256 base64 signature', () => {
   const secret = 'shh';
@@ -100,6 +100,22 @@ test('extractPhone/orderNumber pull the right fields', () => {
   assert.equal(extractPhone(order), '4155552671');
   assert.equal(orderNumber(order), 'A-1042');
   assert.equal(orderNumber({ id: 7 }), '7');
+});
+
+test('createSms selects the provider and rejects unknown ones', () => {
+  const telnyx = createSms({
+    sms: { provider: 'telnyx', telnyx: { apiKey: 'k', from: '+15555550123', messagingProfileId: '' } },
+  });
+  assert.equal(telnyx.name, 'telnyx');
+  assert.equal(typeof telnyx.send, 'function');
+
+  const twilio = createSms({
+    sms: { provider: 'twilio', twilio: { accountSid: 'ACx', authToken: 'y', from: '+15555550123', messagingServiceSid: '' } },
+  });
+  assert.equal(twilio.name, 'twilio');
+  assert.equal(typeof twilio.send, 'function');
+
+  assert.throws(() => createSms({ sms: { provider: 'nope' } }), /Unknown SMS_PROVIDER/);
 });
 
 test('messages are Eros Labs branded and never mention the product category', () => {
