@@ -7,6 +7,18 @@ It listens for WooCommerce order webhooks and sends texts through your choice of
 SMS provider — **Telnyx** or **Twilio** — selected with one setting
 (`SMS_PROVIDER`).
 
+## Two ways to run this
+
+- **WordPress plugin (recommended)** — a self-contained WooCommerce plugin in
+  [`wordpress-plugin/eros-text`](wordpress-plugin/eros-text). It hooks order
+  events directly in WordPress (no separate server, port, or reverse proxy),
+  sends via Telnyx, and adds admin screens for **editable message templates**,
+  **direct texting**, **per-event on/off**, and a **send log**. It also
+  **auto-updates from GitHub releases**. Install the built `eros-text.zip` via
+  *Plugins → Add New → Upload*.
+- **Node bot** (this repo root) — the original standalone webhook service. Kept
+  for reference; the plugin supersedes it for a single WooCommerce store.
+
 > Every message is branded only as *Eros Labs*. The copy never describes or
 > hints at the product category.
 

@@ -1,0 +1,62 @@
+name: Release Eros Text plugin
+
+# Publishes a new plugin release (with an eros-text.zip asset) whenever the
+# plugin version is bumped and pushed to the default branch. The plugin's
+# built-in updater watches these releases and auto-installs new versions.
+
+on:
+  push:
+    paths:
+      - 'wordpress-plugin/**'
+      - '.github/workflows/release-plugin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Only release from the repository's default branch (whatever it's named),
+    # or when run manually.
+    if: github.event_name == 'workflow_dispatch' || github.ref_name == github.event.repository.default_branch
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read plugin version
+        id: ver
+        run: |
+          VERSION=$(grep -iE "^\s*\*?\s*Version:" wordpress-plugin/eros-text/eros-text.php | head -1 | sed -E 's/.*Version:[[:space:]]*//' | tr -d '[:space:]')
+          if [ -z "$VERSION" ]; then echo "Could not read version"; exit 1; fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Plugin version: $VERSION"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "v${{ steps.ver.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release v${{ steps.ver.outputs.version }} already exists — skipping."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build plugin zip
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          cd wordpress-plugin
+          zip -r ../eros-text.zip eros-text -x '*.DS_Store' '*/.git/*'
+          cd ..
+          ls -la eros-text.zip
+
+      - name: Create release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${{ steps.ver.outputs.version }}" eros-text.zip \
+            --title "Eros Text v${{ steps.ver.outputs.version }}" \
+            --notes "Automated release of Eros Text v${{ steps.ver.outputs.version }}." \
+            --latest
