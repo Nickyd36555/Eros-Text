@@ -46,7 +46,7 @@ class Eros_Text_Admin {
             $in = wp_unslash($_POST);
 
             $provider = strtolower(sanitize_text_field($in['sms_provider'] ?? 'telnyx'));
-            if (!in_array($provider, ['telnyx', 'plivo'], true)) {
+            if (!in_array($provider, ['telnyx', 'plivo', 'infobip'], true)) {
                 $provider = 'telnyx';
             }
 
@@ -57,6 +57,8 @@ class Eros_Text_Admin {
                 'telnyx_messaging_profile_id' => sanitize_text_field($in['telnyx_messaging_profile_id'] ?? ''),
                 'plivo_auth_id'               => sanitize_text_field($in['plivo_auth_id'] ?? ''),
                 'plivo_from'                  => sanitize_text_field($in['plivo_from'] ?? ''),
+                'infobip_base_url'            => sanitize_text_field($in['infobip_base_url'] ?? ''),
+                'infobip_from'                => sanitize_text_field($in['infobip_from'] ?? ''),
                 'default_country'             => strtoupper(sanitize_text_field($in['default_country'] ?? 'US')),
                 'shipped_status'              => sanitize_key($in['shipped_status'] ?? 'completed'),
                 'event_placed'                => empty($in['event_placed']) ? 0 : 1,
@@ -78,6 +80,11 @@ class Eros_Text_Admin {
             $values['plivo_auth_token'] = ($typed_plivo !== '')
                 ? $typed_plivo
                 : Eros_Text_Settings::get('plivo_auth_token', '');
+
+            $typed_infobip = sanitize_text_field($in['infobip_api_key'] ?? '');
+            $values['infobip_api_key'] = ($typed_infobip !== '')
+                ? $typed_infobip
+                : Eros_Text_Settings::get('infobip_api_key', '');
 
             Eros_Text_Settings::update($values);
             $notice = 'Settings saved.';

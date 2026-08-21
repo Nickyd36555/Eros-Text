@@ -10,9 +10,13 @@ if (!defined('ABSPATH')) {
 class Eros_Text_Sender {
 
     public static function send($to, $text) {
-        if (Eros_Text_Settings::provider() === 'plivo') {
-            return Eros_Text_Plivo::send($to, $text);
+        switch (Eros_Text_Settings::provider()) {
+            case 'plivo':
+                return Eros_Text_Plivo::send($to, $text);
+            case 'infobip':
+                return Eros_Text_Infobip::send($to, $text);
+            default:
+                return Eros_Text_Telnyx::send($to, $text);
         }
-        return Eros_Text_Telnyx::send($to, $text);
     }
 }

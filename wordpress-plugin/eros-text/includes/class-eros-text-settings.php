@@ -25,6 +25,11 @@ class Eros_Text_Settings {
             'plivo_auth_token'            => '',
             'plivo_from'                  => '',
 
+            // Infobip
+            'infobip_base_url'            => '',
+            'infobip_api_key'             => '',
+            'infobip_from'                => '',
+
             'default_country'             => 'US',
             'shipped_status'              => 'completed',
 
@@ -83,9 +88,21 @@ class Eros_Text_Settings {
         return defined('EROS_TEXT_PLIVO_AUTH_TOKEN') && EROS_TEXT_PLIVO_AUTH_TOKEN;
     }
 
+    /** The Infobip API key. A wp-config.php constant overrides the stored value. */
+    public static function infobip_api_key() {
+        if (defined('EROS_TEXT_INFOBIP_API_KEY') && EROS_TEXT_INFOBIP_API_KEY) {
+            return (string) EROS_TEXT_INFOBIP_API_KEY;
+        }
+        return (string) self::get('infobip_api_key', '');
+    }
+
+    public static function infobip_key_from_constant() {
+        return defined('EROS_TEXT_INFOBIP_API_KEY') && EROS_TEXT_INFOBIP_API_KEY;
+    }
+
     public static function provider() {
         $p = strtolower((string) self::get('sms_provider', 'telnyx'));
-        return in_array($p, ['telnyx', 'plivo'], true) ? $p : 'telnyx';
+        return in_array($p, ['telnyx', 'plivo', 'infobip'], true) ? $p : 'telnyx';
     }
 
     public static function update(array $values) {

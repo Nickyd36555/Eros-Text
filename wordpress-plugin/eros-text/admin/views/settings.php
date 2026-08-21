@@ -7,6 +7,8 @@ $key_set = (Eros_Text_Settings::api_key() !== '');
 $key_const = Eros_Text_Settings::api_key_from_constant();
 $plivo_token_set = (Eros_Text_Settings::plivo_auth_token() !== '');
 $plivo_token_const = Eros_Text_Settings::plivo_token_from_constant();
+$infobip_key_set = (Eros_Text_Settings::infobip_api_key() !== '');
+$infobip_key_const = Eros_Text_Settings::infobip_key_from_constant();
 $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
 ?>
 <div class="wrap">
@@ -32,6 +34,7 @@ $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
                     <select name="sms_provider" id="sms_provider">
                         <option value="telnyx" <?php selected($s['sms_provider'], 'telnyx'); ?>>Telnyx</option>
                         <option value="plivo" <?php selected($s['sms_provider'], 'plivo'); ?>>Plivo</option>
+                        <option value="infobip" <?php selected($s['sms_provider'], 'infobip'); ?>>Infobip</option>
                     </select>
                     <p class="description">Only the selected provider's credentials below are used.</p>
                 </td>
@@ -107,6 +110,40 @@ $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
             </tr>
         </table>
         </div><!-- /plivo -->
+
+        <div class="eros-provider eros-provider-infobip">
+        <h2 class="title">Infobip</h2>
+        <table class="form-table" role="presentation">
+            <tr>
+                <th scope="row"><label for="infobip_base_url">Base URL</label></th>
+                <td>
+                    <input type="text" name="infobip_base_url" id="infobip_base_url" class="regular-text"
+                           value="<?php echo esc_attr($s['infobip_base_url']); ?>" placeholder="xxxxx.api.infobip.com">
+                    <p class="description">Your account-specific API base host, shown on the Infobip API key page.</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="infobip_api_key">API key</label></th>
+                <td>
+                    <?php if ($infobip_key_const) : ?>
+                        <p><em>Set in <code>wp-config.php</code> via <code>EROS_TEXT_INFOBIP_API_KEY</code> (recommended). This field is ignored.</em></p>
+                    <?php else : ?>
+                        <input type="password" name="infobip_api_key" id="infobip_api_key" class="regular-text" autocomplete="new-password"
+                               placeholder="<?php echo $infobip_key_set ? '•••••••• (leave blank to keep current)' : 'your Infobip API key'; ?>">
+                        <p class="description"><?php echo $infobip_key_set ? 'A key is saved. Leave blank to keep it, or type a new one to replace it.' : 'Paste your Infobip API key.'; ?></p>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="infobip_from">From (sender)</label></th>
+                <td>
+                    <input type="text" name="infobip_from" id="infobip_from" class="regular-text"
+                           value="<?php echo esc_attr($s['infobip_from']); ?>" placeholder="+15555550123">
+                    <p class="description">Your registered Infobip sender — a number in E.164 for US (the + is handled automatically).</p>
+                </td>
+            </tr>
+        </table>
+        </div><!-- /infobip -->
 
         <h2 class="title">Store &amp; orders</h2>
         <table class="form-table" role="presentation">
