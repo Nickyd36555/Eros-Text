@@ -12,10 +12,18 @@ class Eros_Text_Settings {
         return [
             'store_name'                  => 'Eros Labs',
 
+            // Which provider actually sends: 'telnyx' or 'plivo'.
+            'sms_provider'                => 'telnyx',
+
             // Telnyx
             'telnyx_api_key'              => '',
             'telnyx_from'                 => '',
             'telnyx_messaging_profile_id' => '',
+
+            // Plivo
+            'plivo_auth_id'               => '',
+            'plivo_auth_token'            => '',
+            'plivo_from'                  => '',
 
             'default_country'             => 'US',
             'shipped_status'              => 'completed',
@@ -61,6 +69,23 @@ class Eros_Text_Settings {
 
     public static function api_key_from_constant() {
         return defined('EROS_TEXT_TELNYX_API_KEY') && EROS_TEXT_TELNYX_API_KEY;
+    }
+
+    /** The Plivo Auth Token. A wp-config.php constant overrides the stored value. */
+    public static function plivo_auth_token() {
+        if (defined('EROS_TEXT_PLIVO_AUTH_TOKEN') && EROS_TEXT_PLIVO_AUTH_TOKEN) {
+            return (string) EROS_TEXT_PLIVO_AUTH_TOKEN;
+        }
+        return (string) self::get('plivo_auth_token', '');
+    }
+
+    public static function plivo_token_from_constant() {
+        return defined('EROS_TEXT_PLIVO_AUTH_TOKEN') && EROS_TEXT_PLIVO_AUTH_TOKEN;
+    }
+
+    public static function provider() {
+        $p = strtolower((string) self::get('sms_provider', 'telnyx'));
+        return in_array($p, ['telnyx', 'plivo'], true) ? $p : 'telnyx';
     }
 
     public static function update(array $values) {

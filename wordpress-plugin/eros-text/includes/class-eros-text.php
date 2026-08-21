@@ -46,7 +46,7 @@ class Eros_Text {
             return ['ok' => false, 'id' => '', 'error' => 'That does not look like a valid phone number.', 'to' => $raw_phone];
         }
 
-        $result = Eros_Text_Telnyx::send($to, $text);
+        $result = Eros_Text_Sender::send($to, $text);
         $result['to'] = $to;
 
         Eros_Text_Log::add([

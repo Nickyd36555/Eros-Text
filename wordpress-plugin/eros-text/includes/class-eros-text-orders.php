@@ -79,7 +79,7 @@ class Eros_Text_Orders {
         }
 
         $text = Eros_Text_Messages::render(self::template_for($event), $order);
-        $result = Eros_Text_Telnyx::send($to, $text);
+        $result = Eros_Text_Sender::send($to, $text);
 
         if ($result['ok']) {
             // Mark sent only on success, so a failure can retry on a later change.

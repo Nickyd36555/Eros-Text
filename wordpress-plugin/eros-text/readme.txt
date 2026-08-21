@@ -3,7 +3,7 @@ Contributors: eroslabs
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 
 Eros Labs order notifications by SMS (Telnyx): placed, processing, and shipped with tracking. Editable messages, direct texting, per-event toggles, and a send log.
@@ -38,6 +38,9 @@ Features:
 Requires WooCommerce.
 
 == Changelog ==
+
+= 1.1.0 =
+* Added Plivo as an alternative SMS provider (choose Telnyx or Plivo in Settings).
 
 = 1.0.0 =
 * Initial release: placed/processing/shipped SMS via Telnyx, editable templates, direct texting, send log, per-event toggles, GitHub auto-update.

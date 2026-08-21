@@ -45,10 +45,18 @@ class Eros_Text_Admin {
 
             $in = wp_unslash($_POST);
 
+            $provider = strtolower(sanitize_text_field($in['sms_provider'] ?? 'telnyx'));
+            if (!in_array($provider, ['telnyx', 'plivo'], true)) {
+                $provider = 'telnyx';
+            }
+
             $values = [
                 'store_name'                  => sanitize_text_field($in['store_name'] ?? 'Eros Labs'),
+                'sms_provider'                => $provider,
                 'telnyx_from'                 => sanitize_text_field($in['telnyx_from'] ?? ''),
                 'telnyx_messaging_profile_id' => sanitize_text_field($in['telnyx_messaging_profile_id'] ?? ''),
+                'plivo_auth_id'               => sanitize_text_field($in['plivo_auth_id'] ?? ''),
+                'plivo_from'                  => sanitize_text_field($in['plivo_from'] ?? ''),
                 'default_country'             => strtoupper(sanitize_text_field($in['default_country'] ?? 'US')),
                 'shipped_status'              => sanitize_key($in['shipped_status'] ?? 'completed'),
                 'event_placed'                => empty($in['event_placed']) ? 0 : 1,
@@ -60,11 +68,16 @@ class Eros_Text_Admin {
                 'auto_update'                 => empty($in['auto_update']) ? 0 : 1,
             ];
 
-            // API key: only overwrite if a new value was typed; blank keeps the old one.
+            // Secrets: only overwrite if a new value was typed; blank keeps the old one.
             $typed_key = sanitize_text_field($in['telnyx_api_key'] ?? '');
             $values['telnyx_api_key'] = ($typed_key !== '')
                 ? $typed_key
                 : Eros_Text_Settings::get('telnyx_api_key', '');
+
+            $typed_plivo = sanitize_text_field($in['plivo_auth_token'] ?? '');
+            $values['plivo_auth_token'] = ($typed_plivo !== '')
+                ? $typed_plivo
+                : Eros_Text_Settings::get('plivo_auth_token', '');
 
             Eros_Text_Settings::update($values);
             $notice = 'Settings saved.';

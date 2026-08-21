@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) {
 /** @var array $s Current settings. @var string $notice */
 $key_set = (Eros_Text_Settings::api_key() !== '');
 $key_const = Eros_Text_Settings::api_key_from_constant();
+$plivo_token_set = (Eros_Text_Settings::plivo_auth_token() !== '');
+$plivo_token_const = Eros_Text_Settings::plivo_token_from_constant();
 $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
 ?>
 <div class="wrap">
@@ -22,6 +24,21 @@ $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
     <form method="post" action="">
         <?php wp_nonce_field('eros_text_save_settings', 'eros_text_settings_nonce'); ?>
 
+        <h2 class="title">SMS provider</h2>
+        <table class="form-table" role="presentation">
+            <tr>
+                <th scope="row"><label for="sms_provider">Provider</label></th>
+                <td>
+                    <select name="sms_provider" id="sms_provider">
+                        <option value="telnyx" <?php selected($s['sms_provider'], 'telnyx'); ?>>Telnyx</option>
+                        <option value="plivo" <?php selected($s['sms_provider'], 'plivo'); ?>>Plivo</option>
+                    </select>
+                    <p class="description">Only the selected provider's credentials below are used.</p>
+                </td>
+            </tr>
+        </table>
+
+        <div class="eros-provider eros-provider-telnyx">
         <h2 class="title">Telnyx</h2>
         <table class="form-table" role="presentation">
             <tr>
@@ -55,6 +72,41 @@ $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
                 </td>
             </tr>
         </table>
+        </div><!-- /telnyx -->
+
+        <div class="eros-provider eros-provider-plivo">
+        <h2 class="title">Plivo</h2>
+        <table class="form-table" role="presentation">
+            <tr>
+                <th scope="row"><label for="plivo_auth_id">Auth ID</label></th>
+                <td>
+                    <input type="text" name="plivo_auth_id" id="plivo_auth_id" class="regular-text"
+                           value="<?php echo esc_attr($s['plivo_auth_id']); ?>" placeholder="MAxxxxxxxxxxxxxxxxxx">
+                    <p class="description">From your Plivo console dashboard. Not secret.</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="plivo_auth_token">Auth Token</label></th>
+                <td>
+                    <?php if ($plivo_token_const) : ?>
+                        <p><em>Set in <code>wp-config.php</code> via <code>EROS_TEXT_PLIVO_AUTH_TOKEN</code> (recommended). This field is ignored.</em></p>
+                    <?php else : ?>
+                        <input type="password" name="plivo_auth_token" id="plivo_auth_token" class="regular-text" autocomplete="new-password"
+                               placeholder="<?php echo $plivo_token_set ? '•••••••• (leave blank to keep current)' : 'your Plivo Auth Token'; ?>">
+                        <p class="description"><?php echo $plivo_token_set ? 'A token is saved. Leave blank to keep it, or type a new one to replace it.' : 'Paste your Plivo Auth Token.'; ?></p>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="plivo_from">From number</label></th>
+                <td>
+                    <input type="text" name="plivo_from" id="plivo_from" class="regular-text"
+                           value="<?php echo esc_attr($s['plivo_from']); ?>" placeholder="+15555550123">
+                    <p class="description">Your Plivo number in E.164 format (the + is fine — it's handled automatically).</p>
+                </td>
+            </tr>
+        </table>
+        </div><!-- /plivo -->
 
         <h2 class="title">Store &amp; orders</h2>
         <table class="form-table" role="presentation">
@@ -125,3 +177,18 @@ $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
         <?php submit_button('Save settings'); ?>
     </form>
 </div>
+
+<script>
+(function () {
+    var sel = document.getElementById('sms_provider');
+    if (!sel) { return; }
+    function sync() {
+        var p = sel.value;
+        document.querySelectorAll('.eros-provider').forEach(function (el) {
+            el.style.display = el.classList.contains('eros-provider-' + p) ? '' : 'none';
+        });
+    }
+    sel.addEventListener('change', sync);
+    sync();
+})();
+</script>
