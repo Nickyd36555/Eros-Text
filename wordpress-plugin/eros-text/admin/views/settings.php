@@ -199,6 +199,23 @@ $placeholders = implode(' ', Eros_Text_Messages::available_placeholders());
             </tr>
         </table>
 
+        <h2 class="title">Quick messages (for "Send a Text")</h2>
+        <p class="description" style="margin-bottom:8px;">
+            Canned messages you can pick on the <strong>Send a Text</strong> screen. One per line, in the form
+            <code>Label | message text</code>. These are sent manually — they are not tied to orders.
+        </p>
+        <div class="notice notice-warning inline" style="margin:0 0 10px;"><p style="margin:.5em 0;">
+            ⚠️ Account/enforcement texts (blocked, reported, etc.) are a <strong>different SMS use case</strong> than order notifications.
+            Only send them to people who <strong>opted in</strong>, and register a <strong>separate 10DLC campaign</strong> for them —
+            sending this content on your order-notifications campaign will get the number suspended.
+        </p></div>
+        <table class="form-table" role="presentation">
+            <tr>
+                <th scope="row"><label for="quick_messages">Quick messages</label></th>
+                <td><textarea name="quick_messages" id="quick_messages" rows="5" class="large-text code"><?php echo esc_textarea($s['quick_messages']); ?></textarea></td>
+            </tr>
+        </table>
+
         <h2 class="title">Updates</h2>
         <table class="form-table" role="presentation">
             <tr>

@@ -43,6 +43,10 @@ class Eros_Text_Settings {
             'tpl_processing'              => "{store_name}: your order #{order_number} is now being processed and prepped for shipment.",
             'tpl_shipped'                 => "{store_name}: your order #{order_number} has shipped! {tracking_line}",
 
+            // Canned "quick messages" for the Send a Text screen. One per line,
+            // in the form: Label | message text
+            'quick_messages'              => "Account blocked | Eros Labs: your account has been blocked. Questions? Email support@[yourdomain]. Reply STOP to opt out.\nAccount unblocked | Eros Labs: your account has been unblocked — you're all set. Reply STOP to opt out.\nReported to Pepban | Pepban: your account has been reported and is under review. Questions? Email support@[yourdomain].",
+
             // Auto-update this plugin from GitHub releases
             'auto_update'                 => 1,
         ];
@@ -98,6 +102,25 @@ class Eros_Text_Settings {
 
     public static function infobip_key_from_constant() {
         return defined('EROS_TEXT_INFOBIP_API_KEY') && EROS_TEXT_INFOBIP_API_KEY;
+    }
+
+    /** Parse the quick-messages setting into [ ['label'=>..,'body'=>..], ... ]. */
+    public static function quick_messages() {
+        $raw = (string) self::get('quick_messages', '');
+        $out = [];
+        foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+            $parts = explode('|', $line, 2);
+            $label = trim($parts[0]);
+            $body  = isset($parts[1]) ? trim($parts[1]) : '';
+            if ($label !== '' && $body !== '') {
+                $out[] = ['label' => $label, 'body' => $body];
+            }
+        }
+        return $out;
     }
 
     public static function provider() {

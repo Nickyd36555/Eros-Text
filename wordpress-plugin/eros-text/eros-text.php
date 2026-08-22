@@ -3,7 +3,7 @@
  * Plugin Name: Eros Text
  * Plugin URI:  https://github.com/Nickyd36555/Eros-Text
  * Description: Sends Eros Labs order notifications (placed, processing, shipped with tracking) by SMS via Telnyx. Editable messages, direct texting, per-event toggles, and a send log. Auto-updates from GitHub.
- * Version:     1.2.0
+ * Version:     1.3.0
  * Author:      Eros Labs
  * License:     GPL-2.0-or-later
  * Requires at least: 5.8
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
     exit; // No direct access.
 }
 
-define('EROS_TEXT_VERSION', '1.2.0');
+define('EROS_TEXT_VERSION', '1.3.0');
 define('EROS_TEXT_FILE', __FILE__);
 define('EROS_TEXT_DIR', plugin_dir_path(__FILE__));
 define('EROS_TEXT_URL', plugin_dir_url(__FILE__));

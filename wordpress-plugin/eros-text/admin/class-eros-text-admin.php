@@ -67,6 +67,7 @@ class Eros_Text_Admin {
                 'tpl_placed'                  => sanitize_textarea_field($in['tpl_placed'] ?? ''),
                 'tpl_processing'              => sanitize_textarea_field($in['tpl_processing'] ?? ''),
                 'tpl_shipped'                 => sanitize_textarea_field($in['tpl_shipped'] ?? ''),
+                'quick_messages'              => sanitize_textarea_field($in['quick_messages'] ?? ''),
                 'auto_update'                 => empty($in['auto_update']) ? 0 : 1,
             ];
 

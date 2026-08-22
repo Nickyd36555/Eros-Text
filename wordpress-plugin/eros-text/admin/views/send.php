@@ -30,6 +30,21 @@ if (!defined('ABSPATH')) {
                     <p class="description">A US number can be typed with or without the +1; other countries need the full +country code.</p>
                 </td>
             </tr>
+            <?php $quick = Eros_Text_Settings::quick_messages(); ?>
+            <?php if (!empty($quick)) : ?>
+            <tr>
+                <th scope="row"><label for="quick_pick">Quick message</label></th>
+                <td>
+                    <select id="quick_pick">
+                        <option value="">— insert a saved message —</option>
+                        <?php foreach ($quick as $i => $q) : ?>
+                            <option value="<?php echo esc_attr($q['body']); ?>"><?php echo esc_html($q['label']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="description">Picking one fills the message box below (you can still edit it before sending).</p>
+                </td>
+            </tr>
+            <?php endif; ?>
             <tr>
                 <th scope="row"><label for="message">Message</label></th>
                 <td>
@@ -41,3 +56,14 @@ if (!defined('ABSPATH')) {
         <?php submit_button('Send text'); ?>
     </form>
 </div>
+
+<script>
+(function () {
+    var pick = document.getElementById('quick_pick');
+    var msg = document.getElementById('message');
+    if (!pick || !msg) { return; }
+    pick.addEventListener('change', function () {
+        if (pick.value) { msg.value = pick.value; msg.focus(); }
+    });
+})();
+</script>
